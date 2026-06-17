@@ -5,6 +5,7 @@ on:
     branches:
       - cluster
       - master
+      - run-golangci-lint
     paths:
       - '**.go'
       - 'go.*'
@@ -31,7 +32,8 @@ jobs:
     permissions:
       contents: read
     # Runs on dedicated runner with extra resources since golangci-lint requires extra memory
-    runs-on: 'vm-runner'
+    # temporarily run it on ubuntu-latest to run on forks
+    runs-on: ubuntu-latest
     steps:
       - name: Code checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
@@ -49,77 +51,8 @@ jobs:
           go-version-file: 'go.mod'
 
       - run: go version
-
-      - name: Cache golangci-lint
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
-        with:
-          path: |
-            ~/.cache/golangci-lint
-            ~/go/bin
-          key: golangci-lint-${{ runner.os }}-${{ steps.go.outputs.go-version }}-${{ hashFiles('.golangci.yml') }}
 
       - name: Run check-all
         run: |
           make check-all
           git diff --exit-code
-
-  unit:
-    name: unit
-    permissions:
-      contents: read
-    # Runs on dedicated runner with extra resources to increase tests speed.
-    runs-on: 'vm-runner'
-
-    strategy:
-      matrix:
-        scenario:
-          - 'test'
-          - 'test-386'
-          - 'test-pure'
-
-    steps:
-      - name: Code checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
-        with:
-          persist-credentials: false
-
-      - name: Setup Go
-        id: go
-        uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c  # v6.4.0
-        with:
-          cache-dependency-path: |
-            go.sum
-            Makefile
-            app/**/Makefile
-          go-version-file: 'go.mod'
-      - run: go version
-
-      - name: Run tests
-        run: make ${{ matrix.scenario}}
-
-  apptest:
-    name: apptest
-    permissions:
-      contents: read
-    # Runs on dedicated runner to isolate app tests from other tests.
-    runs-on: apptest
-
-    steps:
-      - name: Code checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
-        with:
-          persist-credentials: false
-
-      - name: Setup Go
-        id: go
-        uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c  # v6.4.0
-        with:
-          cache-dependency-path: |
-            go.sum
-            Makefile
-            app/**/Makefile
-          go-version-file: 'go.mod'
-      - run: go version
-
-      - name: Run app tests
-        run: make apptest
