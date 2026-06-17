@@ -2,6 +2,9 @@ name: test
 
 on:
   workflow_dispatch:
+    branches:
+      - run-golangci-lint
+      - master
   push:
     branches:
       - run-golangci-lint
