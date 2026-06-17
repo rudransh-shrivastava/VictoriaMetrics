@@ -524,7 +524,7 @@ install-qtc:
 
 
 golangci-lint: install-golangci-lint
-	golangci-lint run --build-tags 'synctest'
+	golangci-lint run --build-tags 'synctest' --verbose
 
 install-golangci-lint:
 	which golangci-lint && (golangci-lint --version | grep -q $(GOLANGCI_LINT_VERSION)) || curl -sSfL https://golangci-lint.run/install.sh | sh -s -- -b $(shell go env GOPATH)/bin v$(GOLANGCI_LINT_VERSION)
