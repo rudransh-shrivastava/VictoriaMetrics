@@ -1,23 +1,14 @@
 name: test
 
 on:
-  push:
+  workflow_dispatch:
     branches:
-      - cluster
       - master
       - run-golangci-lint
-    paths:
-      - '**.go'
-      - 'go.*'
-      - '.github/workflows/main.yml'
-  pull_request:
+  push:
     branches:
-      - cluster
       - master
-    paths:
-      - '**.go'
-      - 'go.*'
-      - '.github/workflows/main.yml'
+      - run-golangci-lint
 
 permissions: {}
 
