@@ -1,6 +1,7 @@
 import { FC, useRef } from "preact/compat";
 import { useCustomPanelDispatch, useCustomPanelState } from "../../../state/customPanel/CustomPanelStateContext";
 import { useQueryDispatch, useQueryState } from "../../../state/query/QueryStateContext";
+import { ABC } from "../../../state/query/QueryStateContext";
 import "./style.scss";
 import Switch from "../../Main/Switch/Switch";
 import useDeviceDetect from "../../../hooks/useDeviceDetect";
