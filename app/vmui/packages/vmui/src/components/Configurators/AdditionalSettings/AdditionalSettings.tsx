@@ -75,8 +75,7 @@ const AdditionalSettingsControls: FC<Props & {isMobile?: boolean}> = ({ isMobile
       {!hideButtons?.disableCache && (
         <Switch
           label={"Disable cache"}
-          value={nocache}
-          onChange={onChangeCache}
+          value={nocache} onChange={onChangeCache}
           fullWidth={isMobile}
         />
       )}
