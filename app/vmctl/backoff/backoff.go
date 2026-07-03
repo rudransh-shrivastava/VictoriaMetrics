@@ -24,7 +24,7 @@ type Backoff struct {
 	factor      float64
 	minDuration time.Duration
 }
-
+// test
 // New initialize backoff object
 func New(retries int, factor float64, minDuration time.Duration) (*Backoff, error) {
 	if retries <= 0 {

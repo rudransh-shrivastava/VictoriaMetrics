@@ -18,6 +18,7 @@ GO_BUILDINFO = -X '$(PKG_PREFIX)/lib/buildinfo.Version=$(APP_NAME)-$(DATEINFO_TA
 TAR_OWNERSHIP ?= --owner=1000 --group=1000
 
 GOLANGCI_LINT_VERSION := 2.12.2
+GOLANGCI_LINT_REVERSE_DEPTH ?= 1
 
 .PHONY: $(MAKECMDGOALS)
 
@@ -524,7 +525,10 @@ install-qtc:
 
 
 golangci-lint: install-golangci-lint
-	GOMEMLIMIT=1000MiB golangci-lint run --build-tags 'synctest' --verbose
+	golangci-lint run --build-tags 'synctest' --verbose
+
+golangci-lint-changed: install-golangci-lint
+	GOLANGCI_LINT_REVERSE_DEPTH=$(GOLANGCI_LINT_REVERSE_DEPTH) ./.github/scripts/golangci-lint-changed.sh
 
 install-golangci-lint:
 	which golangci-lint && (golangci-lint --version | grep -q $(GOLANGCI_LINT_VERSION)) || curl -sSfL https://golangci-lint.run/install.sh | sh -s -- -b $(shell go env GOPATH)/bin v$(GOLANGCI_LINT_VERSION)
