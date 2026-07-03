@@ -3,10 +3,12 @@ copy-metricsql-docs:
 	cp docs/victoriametrics/MetricsQL.md app/vmui/packages/vmui/src/assets/MetricsQL.md
 
 vmui-run-npm-command: vmui-package-base-image
+	# Sets a custom location for the npm cache, preventing access errors in system directories
 	docker run --rm \
 		--user $(shell id -u):$(shell id -g) \
-		--mount type=bind,src="$(shell pwd)/app/vmui",dst=/"$(shell pwd)/app/vmui/" \
-		-w /$(shell pwd)/app/vmui/packages/vmui \
+		-e NPM_CONFIG_CACHE="$(shell pwd)/app/vmui/.npm" \
+		--mount type=bind,src="$(shell pwd)/app/vmui",dst="$(shell pwd)/app/vmui/" \
+		-w $(shell pwd)/app/vmui/packages/vmui \
 		--entrypoint=/bin/bash \
 		vmui-builder-image -c "[ \"$$VMUI_SKIP_INSTALL\" = \"true\" ] || npm ci; $(NPM_COMMAND)"
 

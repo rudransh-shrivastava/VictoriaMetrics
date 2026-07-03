@@ -4,7 +4,7 @@
       "owner": "eslint-stylish",
       "pattern": [
         {
-          "regexp": "^/build/(packages/vmui/[^\\s].*)$",
+          "regexp": "^(/.*app/vmui/packages/vmui/[^\\s].*)$",
           "file": 1
         },
         {
