@@ -29,6 +29,7 @@ jobs:
       checks: write
       contents: read
       pull-requests: read
+      security-events: write
     runs-on: ubuntu-latest
     steps:
       - name: Code checkout
@@ -55,6 +56,20 @@ jobs:
         continue-on-error: true
         env:
           VMUI_SKIP_INSTALL: true
+
+      - name: Install ESLint SARIF formatter
+        working-directory: app/vmui/packages/vmui
+        run: npm install @microsoft/eslint-formatter-sarif
+
+      - name: Generate ESLint SARIF report
+        working-directory: app/vmui/packages/vmui
+        run: npx eslint 'src/**/*.{ts,tsx}' --format @microsoft/eslint-formatter-sarif --output-file eslint-results.sarif
+        continue-on-error: true
+
+      - name: Upload ESLint SARIF report
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: app/vmui/packages/vmui/eslint-results.sarif
 
       - name: Run tests
         id: test
