@@ -26,9 +26,8 @@ jobs:
   vmui-checks:
     name: VMUI Checks (lint, test, typecheck)
     permissions:
-      checks: write
       contents: read
-      pull-requests: read
+      security-events: write
     runs-on: ubuntu-latest
     steps:
       - name: Code checkout
@@ -70,11 +69,11 @@ jobs:
         env:
           VMUI_SKIP_INSTALL: true
 
-      - name: Annotate Code Linting Results
-        uses: ataylorme/eslint-annotate-action@d57a1193d4c59cbfbf3f86c271f42612f9dbd9e9  # 3.0.0
+      - name: Upload ESLint SARIF report
+        uses: github/codeql-action/upload-sarif@8aad20d150bbac5944a9f9d289da16a4b0d87c1e  # v4.36.2
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          report-json: app/vmui/packages/vmui/vmui-lint-report.json
+          checkout_path: /build
+          sarif_file: app/vmui/packages/vmui/vmui-lint-results.sarif
 
       - name: Check overall status
         run: |
