@@ -5,8 +5,8 @@ copy-metricsql-docs:
 vmui-run-npm-command: vmui-package-base-image
 	docker run --rm \
 		--user $(shell id -u):$(shell id -g) \
-		--mount type=bind,src="$(shell pwd)/app/vmui",dst=/build \
-		-w /build/packages/vmui \
+		--mount type=bind,src="$(shell pwd)/app/vmui",dst=/build/app/vmui \
+		-w /build/app/vmui/packages/vmui \
 		--entrypoint=/bin/bash \
 		vmui-builder-image -c "[ \"$$VMUI_SKIP_INSTALL\" = \"true\" ] || npm ci; $(NPM_COMMAND)"
 

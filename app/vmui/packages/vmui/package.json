@@ -9,7 +9,7 @@
     "start": "vite",
     "start:playground": "cross-env PLAYGROUND=true npm run start",
     "build": "vite build",
-    "lint": "eslint --output-file vmui-lint-report.json --format json 'src/**/*.{ts,tsx}'",
+    "lint": "eslint --output-file vmui-lint-results.sarif --format @microsoft/eslint-formatter-sarif 'src/**/*.{ts,tsx}'",
     "lint:local": "eslint --ext .ts,.tsx -f stylish src",
     "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix",
     "copy-metricsql-docs": "cp ../../../../docs/MetricsQL.md src/assets/MetricsQL.md || true",
@@ -35,6 +35,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",
     "@eslint/js": "^9.39.2",
+    "@microsoft/eslint-formatter-sarif": "^3.1.0",
     "@preact/preset-vite": "^2.10.5",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/preact": "^3.2.4",
